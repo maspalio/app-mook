@@ -61,9 +61,9 @@ See [app-data.sql](app-data.sql) or invoke `sqlite3 app.db 'SELECT * FROM user O
 
 - "Session IDs are vulnerable to session fixation attacks."
 
-**Yep.** Session cookie is not of [HttpOnly](https://www.owasp.org/index.php/HttpOnly) kind. This means cookie is likely to be exposed via injection (in turn via query parameters not sanitized in templates) of javascript code accessing `document.cookies` key. Fix via `is_secure: 1` setting in [config](config.yml) file and proper sanitization of query parameters. Usage of variables derived from query parameters (i.e., tainted data) should also be questioned in the first place.
+**Yep.** Session cookie is not of [HttpOnly](https://www.owasp.org/index.php/HttpOnly) kind. This means cookie is likely to be exposed via injection (in turn via query parameters not sanitized in templates) of javascript code accessing `document.cookie` key. Fix via `is_secure: 1` setting in [config](config.yml) file and proper sanitization of query parameters. Usage of variables derived from query parameters (i.e., tainted data) should also be questioned in the first place.
 
-Browse to [http://localhost:5000/](http://localhost:5000/). Should redirect to [login](http://localhost:5000/login). Log in and browse to [here](http://localhost:5000/?title=%22%3E%3Cscript%3Ealert(document.cookies)%3C/script%3E).
+Browse to [http://localhost:5000/](http://localhost:5000/). Should redirect to [login](http://localhost:5000/login). Log in and browse to [here](http://localhost:5000/?title=%22%3E%3Cscript%3Ealert(document.cookie)%3C/script%3E).
 
 - "Session IDs don’t timeout, or user sessions or authentication tokens, particularly single sign-on (SSO) tokens, aren’t properly invalidated during logout."
 
