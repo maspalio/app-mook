@@ -39,6 +39,8 @@ As per [this](https://www.owasp.org/index.php/Top_10_2013-A1-Injection) page.
 
 **Vulnerable** via (contrieved) `/not/note/:id.:format` [route](lib/App/Mook/NOT/Note.pm) which uses a route parameter without proper upfront sanitization. Fix via either SQL query parameterization technique or plain trashing of route (i.e., regular [route](lib/App/Mook/API/Note.pm) uses [DBIx::Class](https://metacpan.org/pod/DBIx::Class) ORM which properly parametrizes underlying queries for performance and security reasons).
 
+Test [case](t/004_not_note_routes.t).
+
 ### A2 - Broken Authentication and Session Management
 
 As per [this](https://www.owasp.org/index.php/Top_10_2013-A2-Broken_Authentication_and_Session_Management) page.
@@ -46,6 +48,8 @@ As per [this](https://www.owasp.org/index.php/Top_10_2013-A2-Broken_Authenticati
 - "User authentication credentials aren’t protected when stored using hashing or encryption."
 
 **Yep.** Hashed, albeit weakly via MD5 algorithm, but **not** salted. Fix via [Dancer2::Plugin::Passphrase](https://metacpan.org/pod/Dancer2::Plugin::Passphrase) plugin, front-end to [Crypt::Eksblowfish::Bcrypt](https://metacpan.org/pod/Crypt::Eksblowfish::Bcrypt) module. [SHA-2](https://en.wikipedia.org/wiki/Sha-2) hashes are also likely to be used via [Digest::SHA](https://metacpan.org/pod/Digest::SHA) module (via same plugin facade).
+
+See [app-data.sql](app-data.sql) or invoke `sqlite3 app.db 'SELECT * FROM user ORDER BY id'`.
 
 - "Credentials can be guessed or overwritten through weak account management functions (e.g., account creation, change password, recover password, weak session IDs)."
 
@@ -58,6 +62,8 @@ As per [this](https://www.owasp.org/index.php/Top_10_2013-A2-Broken_Authenticati
 - "Session IDs are vulnerable to session fixation attacks."
 
 **Yep.** Session cookie is not of [HttpOnly](https://www.owasp.org/index.php/HttpOnly) kind. This means cookie is likely to be exposed via injection (in turn via query parameters not sanitized in templates) of javascript code accessing `document.cookies` key. Fix via `is_secure: 1` setting in [config](config.yml) file and proper sanitization of query parameters. Usage of variables derived from query parameters (i.e., tainted data) should also be questioned in the first place.
+
+Browse to http://localhost:5000/. Should redirect to http://localhost:5000/login. User is `jdoe`, password is `correcthorsebatterystaple`. Browse to [here](http://localhost:5000/?title=%22%3E%3Cscript%3Ealert(document.cookies)%3C/script%3E).
 
 - "Session IDs don’t timeout, or user sessions or authentication tokens, particularly single sign-on (SSO) tokens, aren’t properly invalidated during logout."
 
@@ -77,6 +83,8 @@ As per [this](https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scriptin
 
 **Yep.** See **A1** section. Fix via proper sanitization of tainted user parameters (e.g, through TT's [html](http://template-toolkit.org/docs/manual/Filters.html#section_html) filter or through [HTML::Scrubber](https://metacpan.org/pod/HTML::Scrubber) module). Also set `is_http_only: 1` in [config](config.yml) file but beware it is up to the browser to enforce `HttpOnly` kind of cookies. Also beware of payload obfuscation/encoding (i.e., assess filter).
 
+Log in and the browse to [here](http://localhost:5000/?title="><script>alert("Pwned!")</script>). Teste [case](t/006_xss.t).
+
 ### A4 - Insecure Direct Object References
 
 As per [this](https://www.owasp.org/index.php/Top_10_2013-A4-Insecure_Direct_Object_References) page.
@@ -84,6 +92,8 @@ As per [this](https://www.owasp.org/index.php/Top_10_2013-A4-Insecure_Direct_Obj
 - "For direct references to restricted resources, does the application fail to verify the user is authorized to access the exact resource they have requested?"
 
 **Yep.** REST routes are not authenticated. Fix via addition of ad'hoc checks in `before` hooks of controller [class](lib/App/Sec/API/Note.pm).
+
+Browse to [logout](http://localhost:5000/logout) and then to [api/note/1.json](http://localhost:5000/api/note/1.json).
 
 - "If the reference is an indirect reference, does the mapping to the direct reference fail to limit the values to those authorized for the current user?"
 
