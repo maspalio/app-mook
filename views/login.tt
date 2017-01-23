@@ -1,0 +1,14 @@
+<div id="page">
+  <div id="content">
+    <div id="login">
+      <form name="login" action="login" method="post" accept-charset="utf-8" autocomplete="off">
+        <ul>
+          <li><label for="id">ID</label><input type="text" name="id" placeholder="" required></li>
+          <li><label for="pass">Pass</label><input type="password" name="pass" placeholder="" required></li>
+          <li><input type="submit" value="Login"></li>
+        </ul>
+      </form>
+      <div class="error"><% error %></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+appname: "App::Mook"
+
+layout: "main"
+
+charset: "UTF-8"
+
+session: "YAML"
+
+template: "template_toolkit"
+
+engines:
+  session:
+    YAML:
+      is_http_only: 0
+      is_secure: 0
+  template:
+    template_toolkit:
+      start_tag: '<%'
+      end_tag: '%>'
+
+plugins:
+  DBIC:
+    default:
+      dsn: "dbi:SQLite:dbname=app.db"
+      schema_class: App::Mook::Schema

@@ -1,0 +1,4 @@
+local/
+/app.db
+sessions/
+.dancer
