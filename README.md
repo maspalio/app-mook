@@ -29,7 +29,7 @@ vagrant ssh -- ./app-mook/bin/stop.sh
 vagrant ssh -- ./app-mook/bin/start.sh
 ```
 
-Browse to http://localhost:5000/.
+Browse to [http://localhost:5000/](http://localhost:5000/).
 
 ## Vulnerabilities
 
