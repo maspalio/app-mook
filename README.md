@@ -83,7 +83,7 @@ As per [this](https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scriptin
 
 **Yep.** See **A1** section. Fix via proper sanitization of tainted user parameters (e.g, through TT's [html](http://template-toolkit.org/docs/manual/Filters.html#section_html) filter or through [HTML::Scrubber](https://metacpan.org/pod/HTML::Scrubber) module). Also set `is_http_only: 1` in [config](config.yml) file but beware it is up to the browser to enforce `HttpOnly` kind of cookies. Also beware of payload obfuscation/encoding (i.e., assess filter).
 
-Log in and the browse to [here](http://localhost:5000/?title="><script>alert("Pwned!")</script>). Teste [case](t/006_xss.t).
+Log in and the browse to [here](http://localhost:5000/?title="><script>alert("Pwned!")</script>). Test [case](t/006_xss.t).
 
 ### A4 - Insecure Direct Object References
 
