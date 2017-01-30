@@ -17,6 +17,9 @@ On a Linux/macOS box:
 ./bin/stop.sh
 ```
 
+This requires [Perl](https://www.perl.org/) language, with a version greater than or equal to 5.10.1.
+Also requires `cpanm` tool from [cpanminus](https://metacpan.org/pod/App::cpanminus) project.
+
 Or, via [Vagrant](https://www.vagrantup.com/) + [VirtualBox](https://www.virtualbox.org/) combo:
 
 ```bash
